@@ -93,20 +93,7 @@ app.get('/topPlaylists', (req, res) => {
 
 
 app.post('/song', (req, res) => {
-    const { body } = req;
-    let song = {
-        youtube_link: body.youtube_link,
-        album_id: body.album_id,
-        artist_id: body.artist_id,
-        title: body.title,
-        length: body.length,
-        track_number: body.track_number,
-        lyrics: body.lyrics,
-        created_at: body.created_at,
-        upload_at: body.upload_at,
-        likes: body.likes,
-        play_count: body.play_count
-    };
+    let song = req.body;
     let sql = 'INSERT INTO song SET ?';
     let query = db.query(sql, song, (err, result) => {
         if (err) throw err;
@@ -115,14 +102,7 @@ app.post('/song', (req, res) => {
 });
 
 app.post('/album', (req, res) => {
-    const { body } = req;
-    let album = {
-        artist_id: body.artist_id,
-        name: body.name,
-        cover_img: body.cover_img,
-        created_at: body.created_at,
-        upload_at: body.upload_at
-    };
+    let album = req.body;
     let sql = 'INSERT INTO album SET ?';
     let query = db.query(sql, album, (err, result) => {
         if (err) throw err;
@@ -131,12 +111,7 @@ app.post('/album', (req, res) => {
 });
 
 app.post('/artist', (req, res) => {
-    const { body } = req;
-    let artist = {
-        name: body.name,
-        cover_img: body.cover_img,
-        created_at: body.created_at
-    };
+    let artist = req.body;
     let sql = 'INSERT INTO artist SET ?';
     let query = db.query(sql, artist, (err, result) => {
         if (err) throw err;
@@ -145,13 +120,7 @@ app.post('/artist', (req, res) => {
 });
 
 app.post('/playlist', (req, res) => {
-    const { body } = req;
-    let playlist = {
-        name: body.name,
-        cover_img: body.cover_img,
-        created_at: body.created_at,
-        upload_at: body.upload_at
-    };
+    let playlist = req.body;
     let sql = 'INSERT INTO playlist SET ?';
     let query = db.query(sql, playlist, (err, result) => {
         if (err) throw err;
@@ -161,19 +130,7 @@ app.post('/playlist', (req, res) => {
 
 app.put('/song/:id', (req, res) => {
     const { body } = req;
-    let song = {
-        youtube_link: body.youtube_link,
-        album_id: body.album_id,
-        artist_id: body.artist_id,
-        title: body.title,
-        length: body.length,
-        track_number: body.track_number,
-        lyrics: body.lyrics,
-        created_at: body.created_at,
-        upload_at: body.upload_at,
-        likes: body.likes,
-        play_count: body.play_count
-    };
+    let song = req.body;
     let sql = `UPDATE song SET ? WHERE id = ${req.params.id};`;
     let query = db.query(sql, song, (err, results) => {
         if (err) throw err;
@@ -182,14 +139,7 @@ app.put('/song/:id', (req, res) => {
 });
 
 app.put('/album/:id', (req, res) => {
-    const { body } = req;
-    let album = {
-        artist_id: body.artist_id,
-        name: body.name,
-        cover_img: body.cover_img,
-        created_at: body.created_at,
-        upload_at: body.upload_at
-    };
+    let album = req.body;
     let sql = `UPDATE album SET ? WHERE id = ${req.params.id};`;
     let query = db.query(sql, album, (err, results) => {
         if (err) throw err;
@@ -198,12 +148,7 @@ app.put('/album/:id', (req, res) => {
 });
 
 app.put('/artist/:id', (req, res) => {
-    const { body } = req;
-    let artist = {
-        name: body.name,
-        cover_img: body.cover_img,
-        created_at: body.created_at
-    };
+    let artist = req.body;
     let sql = `UPDATE artist SET ? WHERE id = ${req.params.id};`;
     let query = db.query(sql, artist, (err, results) => {
         if (err) throw err;
@@ -212,13 +157,7 @@ app.put('/artist/:id', (req, res) => {
 });
 
 app.put('/playlist/:id', (req, res) => {
-    const { body } = req;
-    let playlist = {
-        name: body.name,
-        cover_img: body.cover_img,
-        created_at: body.created_at,
-        upload_at: body.upload_at
-    };
+    let playlist = req.body;
     let sql = `UPDATE playlist SET ? WHERE id = ${req.params.id};`;
     let query = db.query(sql, playlist, (err, results) => {
         if (err) throw err;
