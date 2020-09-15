@@ -1,0 +1,79 @@
+.footer {
+  background-color: rgb(40, 40, 40);
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 100px;
+  width: 100%;
+  overflow: hidden;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid black;
+}
+
+.song_image {
+  height: 80px;
+  width: 80px;
+}
+
+.details {
+  padding: 10px;
+  display: flex;
+}
+
+.song_title {
+  font-size: 20px;
+  margin-left: 5px;
+}
+
+.name_artist {
+  margin-top: 5px;
+  margin-left: 5px;
+  font-size: 12px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.icon {
+  color: #b3b3b3;
+  cursor: pointer;
+}
+
+.icon:hover {
+  color: white;
+}
+
+.song_track {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  width: 700px;
+  border-radius: 5px;
+  background: rgb(83, 83, 83);
+  color: white;
+  outline: none;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.song_track::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+}
+
+.heart {
+  margin-top: 5px;
+  margin-left: 5px;
+  width: fit-content;
+  height: fit-content;
+}

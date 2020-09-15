@@ -1,0 +1,16 @@
+.flexContainer {
+  display: flex;
+  color: white;
+}
+
+.artist_cover {
+  max-width: 600px;
+  height: 600px;
+  display: block;
+  margin: auto;
+  margin-bottom: 50px;
+}
+
+h3 {
+  color: white;
+}

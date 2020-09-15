@@ -1,0 +1,30 @@
+.card {
+  background-color: rgb(39, 39, 39);
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
+  color: white;
+}
+
+.image {
+  margin: auto;
+  padding-top: 10px;
+  height: 140px;
+  width: 140px;
+}
+
+h1 {
+  color: white;
+}
+
+.title {
+  margin-left: 25px;
+  font-size: 20px;
+}
+
+.artist_name {
+  margin-left: 25px;
+  font-size: 12px;
+}

@@ -68,7 +68,7 @@ app.get('/topSongs', (req, res) => {
 });
 
 app.get('/topArtists', (req, res) => {
-    let sql = 'SELECT artist.name, SUM(song.likes) AS likes FROM artist JOIN song ON song.artist_id = artist.id GROUP BY artist_id ORDER BY likes DESC;';
+    let sql = 'SELECT artist.name, SUM(song.likes) AS likes FROM artist JOIN song ON song.artist_id = artist.id GROUP BY artist_id ORDER BY likes DESC LIMIT 20;';
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         res.send(results);
@@ -76,7 +76,7 @@ app.get('/topArtists', (req, res) => {
 });
 
 app.get('/topAlbums', (req, res) => {
-    let sql = 'SELECT album.name, SUM(song.likes) AS likes FROM album JOIN song ON song.album_id = album.id GROUP BY album_id ORDER BY likes DESC;';
+    let sql = 'SELECT album.name, SUM(song.likes) AS likes FROM album JOIN song ON song.album_id = album.id GROUP BY album_id ORDER BY likes DESC LIMIT 20;';
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         res.send(results);
