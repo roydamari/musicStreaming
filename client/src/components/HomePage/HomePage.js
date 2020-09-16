@@ -7,6 +7,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import axios from 'axios'
+import Controls from '../Controls/Controls';
 
 export default function HomePage() {
     const [topSongs, setSongs] = useState([]);
@@ -79,6 +80,7 @@ export default function HomePage() {
                     );
                 })}
             </Slider>
+            <Controls />
         </div>
     );
 }

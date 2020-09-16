@@ -4,6 +4,7 @@ import SongCard from '../Cards/SongCard';
 import AlbumCard from '../Cards/AlbumCard';
 import Slider from "react-slick";
 import axios from 'axios'
+import Controls from '../Controls/Controls';
 
 export default function ArtistPage() {
 
@@ -64,6 +65,7 @@ export default function ArtistPage() {
                     </Slider>
                 </div>
             </div>
+            <Controls />
         </div >
     );
 }

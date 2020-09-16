@@ -3,6 +3,7 @@ import './PlaylistPage.css';
 import SongCard from '../Cards/SongCard';
 import Slider from "react-slick";
 import axios from 'axios'
+import Controls from '../Controls/Controls';
 
 export default function PlaylistPage() {
 
@@ -44,6 +45,7 @@ export default function PlaylistPage() {
                     })}
                 </Slider>
             </div>
+            <Controls />
         </div>
     );
 }
