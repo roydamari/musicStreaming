@@ -68,7 +68,7 @@ app.get('/topSongs', (req, res) => {
 });
 
 app.get('/topArtists', (req, res) => {
-    let sql = 'SELECT artist.name, SUM(song.likes) AS likes FROM artist JOIN song ON song.artist_id = artist.id GROUP BY artist_id ORDER BY likes DESC LIMIT 20;';
+    let sql = 'SELECT artist.name, ROUND(SUM(song.likes)/COUNT(song.id)) AS likes FROM artist JOIN song ON song.artist_id = artist.id GROUP BY artist_id ORDER BY likes DESC LIMIT 20;';
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         res.send(results);
@@ -76,7 +76,7 @@ app.get('/topArtists', (req, res) => {
 });
 
 app.get('/topAlbums', (req, res) => {
-    let sql = 'SELECT album.name, SUM(song.likes) AS likes FROM album JOIN song ON song.album_id = album.id GROUP BY album_id ORDER BY likes DESC LIMIT 20;';
+    let sql = 'SELECT album.name, ROUND(SUM(song.likes)/COUNT(song.id)) AS likes, album.id FROM album JOIN song ON song.album_id = album.id GROUP BY album_id ORDER BY likes DESC LIMIT 20;';
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         res.send(results);
@@ -84,7 +84,7 @@ app.get('/topAlbums', (req, res) => {
 });
 
 app.get('/topPlaylists', (req, res) => {
-    let sql = 'SELECT playlist.name, SUM(song.likes) AS likes FROM playlist JOIN playlist_songs ON playlist.id = playlist_songs.playlist_id JOIN song ON playlist_songs.song_id = song.id GROUP BY playlist_id ORDER BY SUM(song.likes) DESC LIMIT 20;';
+    let sql = 'SELECT playlist.name, ROUND(SUM(song.likes)/COUNT(song.id)) AS likes FROM playlist JOIN playlist_songs ON playlist.id = playlist_songs.playlist_id JOIN song ON playlist_songs.song_id = song.id GROUP BY playlist_id ORDER BY SUM(song.likes) DESC LIMIT 20;';
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         res.send(results);

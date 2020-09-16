@@ -30,6 +30,7 @@ export default function PlaylistPage() {
                 <h1 className='playlist_title'>Album Title</h1>
                 <img className='album_cover'
                     src='https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTsn322z_Dw58yJfDO_1OpN5Uf32nBpy-lKrg&usqp=CAU'
+                    alt=''
                 />
             </div>
             <div style={{ margin: 'auto', width: '1760px' }}>

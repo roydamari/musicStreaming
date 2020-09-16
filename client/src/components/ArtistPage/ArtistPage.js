@@ -14,7 +14,7 @@ export default function ArtistPage() {
             let songs = await axios.get('/topSongs');
             setSongs(songs.data);
             let albums = await axios.get('/topAlbums');
-            setAlbums(songs.data);
+            setAlbums(albums.data);
         })();
     }, []);
 
@@ -35,6 +35,7 @@ export default function ArtistPage() {
                 <h3>Artist's name</h3>
                 <img className='artist_cover'
                     src='https://content.api.news/v3/images/bin/ba49fee5bc802f0a32a9415fef635f71'
+                    alt=''
                 />
             </div>
             <div style={{ margin: 'auto', width: '1200px' }}>

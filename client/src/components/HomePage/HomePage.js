@@ -38,7 +38,7 @@ export default function HomePage() {
     };
 
     return (
-        <div style={{ marginLeft: '28px', width: '1760px' }}>
+        <div style={{ margin: 'auto', width: '1760px' }}>
             <h1>Top Songs</h1>
             <Slider {...settings}>
                 {topSongs.map(song => {

@@ -31,6 +31,7 @@ export default function AlbumPage() {
                 <h3>Artist's name</h3>
                 <img className='album_cover'
                     src='https://i.pinimg.com/originals/3a/f0/e5/3af0e55ea66ea69e35145fb108b4a636.jpg'
+                    alt=''
                 />
             </div>
             <div style={{ margin: 'auto', width: '1760px' }}>
