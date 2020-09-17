@@ -2,21 +2,25 @@ import React, { useEffect, useRef, useState } from 'react';
 import { BiSkipPrevious, BiPlayCircle, BiSkipNext, BiPauseCircle, BiVolumeFull } from 'react-icons/bi';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import './Controls.css'
+import { Link } from 'react-router-dom';
 
 export default function Controls(props) {
 
-    const liked = true;
     let duration = props.player ? props.player.getDuration() : '';
     const [currentTime, setCurrentTime] = useState();
-    const [playing, setPlaying] = useState(false);
+    const [playing, setPlaying] = useState(props.playing);
+    const [liked, setLiked] = useState(false);
     const rangeRef = useRef();
     const volumeRef = useRef();
+
 
     useEffect(() => {
         if (props.player) {
             setInterval(() => {
                 setCurrentTime(props.player.getCurrentTime())
-                rangeRef.current.value = props.player.getCurrentTime();
+                if (rangeRef.current) {
+                    rangeRef.current.value = props.player.getCurrentTime();
+                }
             }, 1000);
         }
     }, [props.player])
@@ -43,6 +47,9 @@ export default function Controls(props) {
         props.player.setVolume(e.currentTarget.value);
     }
 
+    function toggleLike() {
+        setLiked(prevValue => !prevValue);
+    }
 
     return (
         <div className='footer'>
@@ -51,23 +58,39 @@ export default function Controls(props) {
                     alt=''
                 />
                 <div>
-                    <div className='song_title'>Song Title</div>
-                    <div className='name_artist'>Artist's name</div>
-                    <div className='heart'>
+                    <div className='song_title'>{props.currentSong && props.currentSong.title}</div>
+                    <div className='name_artist'>{props.currentSong && props.currentSong.artist_name}</div>
+                    <div className='heart' onClick={toggleLike}>
                         {liked ? <AiOutlineHeart size='24px' /> : <AiFillHeart size='24px' />}
                     </div>
                 </div>
             </div>
-            <div>
+            <div className='play_range'>
                 <div className='controls'>
                     <div className='icon'>
-                        <BiSkipPrevious size='32px' />
+                        <Link to={`/song/${props.prevSong}`} style={{ color: '#b3b3b3' }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.color = e.currentTarget.style.color === 'white' ? '#b3b3b3' : 'white'
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.color = e.currentTarget.style.color === 'white' ? '#b3b3b3' : 'white'
+                            }}>
+                            <BiSkipPrevious size='32px' />
+                        </Link>
                     </div>
                     <div className='icon'>
                         {playing ? <BiPauseCircle size='32px' onClick={PlayPause} /> : <BiPlayCircle size='32px' onClick={PlayPause} />}
                     </div>
                     <div className='icon'>
-                        <BiSkipNext size='32px' />
+                        <Link to={`/song/${props.nextSong}`} style={{ color: '#b3b3b3' }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.color = e.currentTarget.style.color === 'white' ? '#b3b3b3' : 'white'
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.color = e.currentTarget.style.color === 'white' ? '#b3b3b3' : 'white'
+                            }}>
+                            <BiSkipNext size='32px' />
+                        </Link>
                     </div>
                 </div>
                 <span>{toMinutes(Math.round(currentTime))}</span>

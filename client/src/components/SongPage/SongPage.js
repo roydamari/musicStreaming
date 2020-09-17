@@ -5,18 +5,37 @@ import Slider from "react-slick";
 import axios from 'axios'
 import YouTube from 'react-youtube';
 import Controls from '../Controls/Controls';
+import NavBar from '../NavBar/NavBar';
 
-export default function SongPage() {
+export default function SongPage(props) {
 
     const [topSongs, setSongs] = useState([]);
+    const [currentSong, setCurrent] = useState()
     const [player, setPlayer] = useState();
+    const [nextSong, setNext] = useState();
+    const [prevSong, setPrev] = useState();
 
     useEffect(() => {
         (async function fetchData() {
             let songs = await axios.get('/topSongs');
             setSongs(songs.data);
+            const found = songs.data.find(song => song.youtube_link === props.match.params.id)
+            setCurrent(found);
+            const next = songs.data.find(song => found.id + 1 === song.id)
+            if (next) {
+                setNext(next.youtube_link);
+            } else {
+                setNext(songs.data[0].youtube_link);
+            }
+            const prev = songs.data.find(song => found.id - 1 === song.id)
+            if (prev) {
+                setPrev(prev.youtube_link);
+            } else {
+                setPrev(songs.data[0].youtube_link);
+            }
         })();
-    }, []);
+    }, [props.match.params.id])
+
 
     const settings = {
         className: "slider variable-width",
@@ -43,38 +62,40 @@ export default function SongPage() {
         }
     }
 
+
     const opts = {
         height: '0',
         width: '0',
         playerVars: {
-            autoplay: 0,
+            autoplay: 1,
         },
     };
 
 
     return (
         <div>
+            <NavBar />
             <div>
-                <h1>Song Title</h1>
-                <h3>Artist's name</h3>
+                <h1>{currentSong && currentSong.title}</h1>
+                <h3>{currentSong && currentSong.artist_name}</h3>
                 <img className='song_cover'
-                    src='https://images.squarespace-cdn.com/content/56454c01e4b0177ad4141742/1458827329966-I6OAVNU68IOF0A4IHQVY/Im-Gonna-Be-500-Miles-Cover.jpg?content-type=image%2Fjpeg'
+                    src={`https://img.youtube.com/vi/${currentSong && currentSong.youtube_link}/hqdefault.jpg`}
                     alt=''
                 />
-                <YouTube videoId="_83KqwEEGw4" opts={opts} onReady={_onReady} />;
+                <YouTube videoId={props.match.params.id} opts={opts} onReady={_onReady} onEnd={() => { window.location.href = `/song/${nextSong}`; }} />;
             </div>
             <div style={{ margin: 'auto', width: '1760px' }}>
                 <Slider {...settings}>
                     {topSongs.map(song => {
                         return (
                             <div key={song.id} style={{ width: 220 }}>
-                                <SongCard src='https://images.squarespace-cdn.com/content/56454c01e4b0177ad4141742/1458827329966-I6OAVNU68IOF0A4IHQVY/Im-Gonna-Be-500-Miles-Cover.jpg?content-type=image%2Fjpeg' song={song} />
+                                <SongCard song={song} />
                             </div>
                         );
                     })}
                 </Slider>
             </div>
-            <Controls onPlay={PlayPause} player={player} />
+            <Controls onPlay={PlayPause} player={player} currentSong={currentSong} nextSong={nextSong} prevSong={prevSong} playing={true} />
         </div>
     );
 }

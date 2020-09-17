@@ -3,5 +3,14 @@
   width: 400px;
   display: block;
   margin: auto;
-  margin-bottom: 10px;
+  margin-bottom: -10px;
+}
+
+h1 {
+  margin-top: -5px;
+  margin-left: 8px;
+}
+
+h3 {
+  margin-left: 8px;
 }

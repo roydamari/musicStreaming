@@ -1,3 +1,10 @@
 .slick-slide div {
   outline: none;
 }
+
+.home_container {
+  height: fit-content;
+}
+.top_title {
+  margin-top: 12px;
+}

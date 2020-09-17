@@ -1,0 +1,37 @@
+.nav_bar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 70px;
+  width: 98.7%;
+  background-color: rgb(38, 38, 38);
+  z-index: 1000;
+  border-bottom: 1px solid black;
+  display: flex;
+  align-items: center;
+  padding-left: 25px;
+}
+
+.nav_icon {
+  margin: 8px;
+  color: #b3b3b3;
+  cursor: pointer;
+}
+
+.nav_icon:hover {
+  color: white;
+  height: 30px;
+  width: 30px;
+}
+
+.search_box {
+  margin-left: 10px;
+  border-radius: 12px;
+  outline: none;
+  border: none;
+  height: 25px;
+  width: 0px;
+  visibility: hidden;
+  transition: width 0.1s linear;
+  font-size: 18px;
+}
