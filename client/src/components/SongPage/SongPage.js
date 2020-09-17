@@ -82,7 +82,7 @@ export default function SongPage(props) {
                     src={`https://img.youtube.com/vi/${currentSong && currentSong.youtube_link}/hqdefault.jpg`}
                     alt=''
                 />
-                <YouTube videoId={props.match.params.id} opts={opts} onReady={_onReady} onEnd={() => { window.location.href = `/song/${nextSong}`; }} />;
+                <YouTube videoId={props.match.params.id} opts={opts} onReady={_onReady} onEnd={() => { window.location.href = `/song/${nextSong}`; }} />
             </div>
             <div style={{ margin: 'auto', width: '1760px' }}>
                 <Slider {...settings}>

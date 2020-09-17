@@ -44,7 +44,21 @@ app.get('/artist/:id', (req, res) => {
 });
 
 app.get('/album/:id', (req, res) => {
-    let sql = `SELECT * FROM album WHERE id = ${req.params.id};`;
+    let sql = `SELECT album.id, album.artist_id, album.name, album.cover_img, album.created_at, album.upload_at, artist.name AS artist_name FROM album
+JOIN song ON album.id= song.album_id
+JOIN artist ON artist.id = album.artist_id
+WHERE album_id = ${req.params.id};`
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results);
+    })
+});
+
+app.get('/album/:id/songs', (req, res) => {
+    let sql = `SELECT song.id, youtube_link, album_id, song.artist_id, title, length, track_number, lyrics, song.created_at, song.upload_at, likes, play_count, artist.name AS artist_name FROM album
+    JOIN song ON album.id= song.album_id
+    JOIN artist ON artist.id = song.artist_id
+    WHERE album_id = ${req.params.id};`;
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         res.send(results);
