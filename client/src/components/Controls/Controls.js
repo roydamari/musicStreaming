@@ -54,7 +54,7 @@ export default function Controls(props) {
     return (
         <div className='footer'>
             <div className='details'>
-                <img className='song_image' src='https://images.squarespace-cdn.com/content/56454c01e4b0177ad4141742/1458827329966-I6OAVNU68IOF0A4IHQVY/Im-Gonna-Be-500-Miles-Cover.jpg?content-type=image%2Fjpeg'
+                <img className='song_image' src={`https://img.youtube.com/vi/${props.currentSong && props.currentSong.youtube_link}/hqdefault.jpg`}
                     alt=''
                 />
                 <div>
@@ -68,29 +68,15 @@ export default function Controls(props) {
             <div className='play_range'>
                 <div className='controls'>
                     <div className='icon'>
-                        <Link to={`/song/${props.prevSong}`} style={{ color: '#b3b3b3' }}
-                            onMouseOver={(e) => {
-                                e.currentTarget.style.color = e.currentTarget.style.color === 'white' ? '#b3b3b3' : 'white'
-                            }}
-                            onMouseOut={(e) => {
-                                e.currentTarget.style.color = e.currentTarget.style.color === 'white' ? '#b3b3b3' : 'white'
-                            }}>
-                            <BiSkipPrevious size='32px' />
-                        </Link>
+                        <div className='icon'>
+                            <BiSkipPrevious size='32px' onClick={props.playPrev} />
+                        </div>
                     </div>
                     <div className='icon'>
                         {playing ? <BiPauseCircle size='32px' onClick={PlayPause} /> : <BiPlayCircle size='32px' onClick={PlayPause} />}
                     </div>
                     <div className='icon'>
-                        <Link to={`/song/${props.nextSong}`} style={{ color: '#b3b3b3' }}
-                            onMouseOver={(e) => {
-                                e.currentTarget.style.color = e.currentTarget.style.color === 'white' ? '#b3b3b3' : 'white'
-                            }}
-                            onMouseOut={(e) => {
-                                e.currentTarget.style.color = e.currentTarget.style.color === 'white' ? '#b3b3b3' : 'white'
-                            }}>
-                            <BiSkipNext size='32px' />
-                        </Link>
+                        <BiSkipNext size='32px' onClick={props.skipSong} />
                     </div>
                 </div>
                 <span>{toMinutes(Math.round(currentTime))}</span>

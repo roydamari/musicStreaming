@@ -71,6 +71,14 @@ export default function SongPage(props) {
         },
     };
 
+    function skipSong() {
+        window.location.href = `/song/${nextSong}`;
+    }
+
+    function playPrev() {
+        window.location.href = `/song/${prevSong}`;
+    }
+
 
     return (
         <div>
@@ -82,7 +90,7 @@ export default function SongPage(props) {
                     src={`https://img.youtube.com/vi/${currentSong && currentSong.youtube_link}/hqdefault.jpg`}
                     alt=''
                 />
-                <YouTube videoId={props.match.params.id} opts={opts} onReady={_onReady} onEnd={() => { window.location.href = `/song/${nextSong}`; }} />
+                <YouTube videoId={props.match.params.id} opts={opts} onReady={_onReady} onEnd={skipSong} />
             </div>
             <div style={{ margin: 'auto', width: '1760px' }}>
                 <Slider {...settings}>
@@ -95,7 +103,7 @@ export default function SongPage(props) {
                     })}
                 </Slider>
             </div>
-            <Controls onPlay={PlayPause} player={player} currentSong={currentSong} nextSong={nextSong} prevSong={prevSong} playing={true} />
+            <Controls onPlay={PlayPause} player={player} currentSong={currentSong} skipSong={skipSong} playPrev={playPrev} playing={true} />
         </div>
     );
 }

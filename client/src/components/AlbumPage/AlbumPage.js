@@ -25,7 +25,7 @@ export default function AlbumPage(props) {
             setSongs(songs.data);
             setCurrent(songs.data[0]);
             setNext(songs.data[1]);
-            setPrev(songs.data[songs.length - 1]);
+            setPrev(songs.data[songs.data.length - 1]);
         })();
     }, []);
 
@@ -35,9 +35,27 @@ export default function AlbumPage(props) {
         player.playVideo()
         const next = albumSongs.find(song => song.id === nextSong.id + 1)
         setPrev(currentSong);
-        setCurrent(nextSong);
-        setNext(next)
+        if (next) {
+            setCurrent(nextSong);
+            setNext(next)
+        } else {
+            setCurrent(albumSongs[0]);
+            setNext(albumSongs[1])
+        }
+    }
 
+    function playPrev() {
+        player.cueVideoById(prevSong.youtube_link);
+        player.playVideo()
+        const prev = albumSongs.find(song => song.id === prevSong.id - 1);
+        setNext(currentSong);
+        if (prev) {
+            setCurrent(prevSong);
+            setPrev(prev);
+        } else {
+            setCurrent(albumSongs[albumSongs.length - 1]);
+            setPrev(albumSongs[albumSongs.length - 2])
+        }
     }
 
     function _onReady(event) {
@@ -81,7 +99,7 @@ export default function AlbumPage(props) {
                 <h1>{currentAlbum && currentAlbum.name}</h1>
                 <h3>{currentAlbum && currentAlbum.artist_name}</h3>
                 <img className='album_cover'
-                    src='https://i.pinimg.com/originals/3a/f0/e5/3af0e55ea66ea69e35145fb108b4a636.jpg'
+                    src={currentAlbum && currentAlbum.cover_img}
                     alt=''
                 />
             </div>
@@ -96,7 +114,7 @@ export default function AlbumPage(props) {
                     })}
                 </Slider>
             </div>
-            <Controls onPlay={PlayPause} player={player} currentSong={currentSong} nextSong={nextSong} prevSong={prevSong} playing={true} />
+            <Controls onPlay={PlayPause} player={player} currentSong={currentSong} skipSong={playNext} playPrev={playPrev} playing={true} />
             <YouTube videoId={currentSong && currentSong.youtube_link} opts={opts} onReady={_onReady} onEnd={playNext} />
         </div>
     );

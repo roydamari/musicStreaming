@@ -21,7 +21,7 @@ function App() {
           <Route path="/song/:id" exact render={(props) => (
             <SongPage {...props} />
           )} />
-          <Route path="/album/:id" exact render={(props) => (
+          <Route path={`/album/:id`} exact render={(props) => (
             <AlbumPage {...props} />
           )} />
           <Route path="/artist" exact render={(props) => (
