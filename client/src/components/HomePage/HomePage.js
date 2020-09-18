@@ -27,6 +27,7 @@ export default function HomePage() {
             let songs = await axios.get('/topSongs');
             setSongs(songs.data);
             let albums = await axios.get('/topAlbums');
+            console.log(albums.data);
             setAlbums(albums.data);
             let artists = await axios.get('/topArtists');
             setArtists(artists.data);
@@ -83,21 +84,31 @@ export default function HomePage() {
     const settings = {
         className: "slider variable-width",
         dots: true,
-        infinite: true,
+        infinite: false,
         slidesToShow: 1,
         slidesToScroll: 3,
         variableWidth: true,
         arrows: true,
     };
 
+    const songSettings = {
+        className: "slider variable-width",
+        dots: true,
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 4,
+        variableWidth: true,
+        arrows: true,
+    };
+
+    console.log({ ...settings });
 
     return (
         <>
-            <YouTube videoId={currentSong && currentSong.youtube_link} opts={opts} onReady={_onReady} onEnd={() => { window.location.href = `/song/${nextSong}`; }} />
             <NavBar />
             <div style={{ width: '1760px', margin: 'auto', paddingBottom: '110px' }} className='home_container'>
                 <h1 className='top_title'>Top Songs</h1>
-                <Slider {...settings}>
+                <Slider {...songSettings}>
                     {topSongs.map(song => {
                         return (
                             <div key={song.id} style={{ width: 220 }}>
@@ -137,6 +148,7 @@ export default function HomePage() {
                     })}
                 </Slider>
             </div>
+            <YouTube videoId={currentSong && currentSong.youtube_link} opts={opts} onReady={_onReady} onEnd={() => { window.location.href = `/song/${nextSong}`; }} />
             <Controls onPlay={PlayPause} player={player} currentSong={currentSong} nextSong={nextSong} prevSong={prevSong} playing={false} />
         </>
     );

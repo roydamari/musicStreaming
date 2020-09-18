@@ -9,7 +9,7 @@ import NavBar from '../NavBar/NavBar';
 
 export default function SongPage(props) {
 
-    const [topSongs, setSongs] = useState([]);
+    const [AlbumSongs, setSongs] = useState([]);
     const [currentSong, setCurrent] = useState()
     const [player, setPlayer] = useState();
     const [nextSong, setNext] = useState();
@@ -17,17 +17,18 @@ export default function SongPage(props) {
 
     useEffect(() => {
         (async function fetchData() {
-            let songs = await axios.get('/topSongs');
+            let current = await axios.get(`/song/${props.match.params.id}`)
+            current = current.data[0];
+            setCurrent(current);
+            let songs = await axios.get(`/album/${current.album_id}/songs`);
             setSongs(songs.data);
-            const found = songs.data.find(song => song.youtube_link === props.match.params.id)
-            setCurrent(found);
-            const next = songs.data.find(song => found.id + 1 === song.id)
+            const next = songs.data.find(song => current.id + 1 === song.id)
             if (next) {
                 setNext(next.youtube_link);
             } else {
                 setNext(songs.data[0].youtube_link);
             }
-            const prev = songs.data.find(song => found.id - 1 === song.id)
+            const prev = songs.data.find(song => current.id - 1 === song.id)
             if (prev) {
                 setPrev(prev.youtube_link);
             } else {
@@ -94,7 +95,7 @@ export default function SongPage(props) {
             </div>
             <div style={{ margin: 'auto', width: '1760px' }}>
                 <Slider {...settings}>
-                    {topSongs.map(song => {
+                    {AlbumSongs.map(song => {
                         return (
                             <div key={song.id} style={{ width: 220 }}>
                                 <SongCard song={song} />

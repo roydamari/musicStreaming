@@ -28,7 +28,15 @@ app.get('/songs', (req, res) => {
 });
 
 app.get('/song/:id', (req, res) => {
-    let sql = `SELECT * FROM song WHERE id = ${req.params.id};`;
+    let sql = ''
+    if (!isNaN(req.params.id)) {
+        sql = `SELECT * FROM song WHERE id = ${req.params.id};`;
+    } else {
+        sql = `SELECT song.id, youtube_link, album_id, artist_id, title, length, track_number, lyrics, song.created_at, upload_at, likes, play_count, artist.name AS artist_name 
+        FROM song 
+        JOIN artist ON song.artist_id = artist.id
+        WHERE youtube_link = '${req.params.id}';`;
+    }
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         res.send(results);
@@ -37,6 +45,25 @@ app.get('/song/:id', (req, res) => {
 
 app.get('/artist/:id', (req, res) => {
     let sql = `SELECT * FROM artist WHERE id = ${req.params.id};`;
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results);
+    })
+});
+
+app.get('/artist/:id/albums', (req, res) => {
+    let sql = `SELECT album.id, album.artist_id, album.name, album.cover_img, album.created_at, album.upload_at FROM artist
+    JOIN album ON album.artist_id = artist.id
+    WHERE artist.id= ${req.params.id};`;
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results);
+    })
+});
+
+app.get('/artist/:id/songs', (req, res) => {
+    let sql = `SELECT song.id, youtube_link, album_id, artist_id, title, length, track_number, lyrics, song.created_at, upload_at, likes, play_count, artist.name AS artist_name FROM artist
+    JOIN song ON song.artist_id = ${req.params.id};`;
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         res.send(results);
