@@ -22,7 +22,7 @@ INSERT INTO song VALUES (1,'OjGrcJ4lZCc',1,1,'Eraser', '227', 1, 'lyrics', '2020
 
 -- Eminem- MMLP 2 Album
 INSERT INTO artist VALUES (2, 'Eminem', 'https://upload.wikimedia.org/wikipedia/commons/4/4a/Eminem_-_Concert_for_Valor_in_Washington%2C_D.C._Nov._11%2C_2014_%282%29_%28Cropped%29.jpg', '2007-08-08');
-INSERT INTO album VALUES (2, 2,'The Marshal Mathers LP2', 'https://i9.ytimg.com/s_p/OLAK5uy_l0FbbGAEddn8zg-TkJLWjWTRRyvzV-SkY/sddefault.jpg?sqp=COzEkvsFir7X7AMGCOST3-EF&rs=AOn4CLDBgOTvvuJGi7ugb4zgXcuu_AP6iw&v=1547160036', '2013-08-05', '2013-08-05');
+INSERT INTO album VALUES (2, 2,'The Marshal Mathers LP2', 'https://images-na.ssl-images-amazon.com/images/I/91E0tsoLNrL._SL1500_.jpg', '2013-08-05', '2013-08-05');
 INSERT INTO song VALUES (17, 'NFtsBBXDrGs', 2,2, 'Bad Guy', '434', 1, 'lyrics', '2013-08-05',' 2013-08-05', 43432, 4576131),
 (18, 'cZByUMZba-s', 2,2, 'Parking Lot (Skit)', '55', 2, 'lyrics', '2013-08-05',' 2013-08-05', 2071, 459066),
 (19, 'xGoggPk6Jr4', 2,2, 'Rhyme Or Reason', '301', 3, 'lyrics', '2013-08-05',' 2013-08-05', 12672, 1002244),
@@ -39,4 +39,41 @@ INSERT INTO song VALUES (17, 'NFtsBBXDrGs', 2,2, 'Bad Guy', '434', 1, 'lyrics', 
 (30, 'tIWUkeSjzH8', 2,2, 'Love Game', '296', 14, 'lyrics', '2013-08-05',' 2013-08-05', 10343, 600441 ),
 (31, '7bDLIV96LD4', 2,2, 'Headlights', '250', 15, 'lyrics', '2013-08-05',' 2013-08-05', 1084579, 123258589 ),
 (32, 'P-SyH04QKGU', 2,2, 'Evil Twin (Skit)', '455', 16, 'lyrics', '2013-08-05',' 2013-08-05', 5543, 442790);
+
+
+INSERT INTO playlist VALUES (1,'Favourites', 'https://i.pinimg.com/474x/90/e3/41/90e34121229253d293dcd6e8e40b6f44.jpg', '2020-09-19', '2020-09-19');
+
+INSERT INTO playlist_songs VALUES (1, 1, 1),
+(2, 3, 1),
+(3, 5, 1),
+(4, 7, 1),
+(5, 9, 1),
+(6, 11, 1),
+(7, 13, 1),
+(8, 15, 1),
+(9, 17, 1),
+(10, 19, 1),
+(11, 21, 1),
+(12, 23, 1),
+(13, 25, 1),
+(14, 27, 1),
+(15, 29, 1);
+
+INSERT INTO playlist VALUES (2,'Gym', 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/e8cb5029890001.560961917016e.png', '2020-09-19', '2020-09-19');
+
+INSERT INTO playlist_songs VALUES (16, 2, 2),
+(17, 4, 2),
+(18, 6, 2),
+(19, 7, 2),
+(20, 10, 2),
+(21, 12, 2),
+(22, 14, 2),
+(23, 16, 2),
+(24, 18, 2),
+(25, 20, 2),
+(26, 22, 2),
+(27, 24, 2),
+(28, 26, 2),
+(29, 28, 2),
+(30, 30, 2);
 

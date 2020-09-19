@@ -108,7 +108,7 @@ export default function AlbumPage(props) {
                     {albumSongs.map(song => {
                         return (
                             <div key={song.id} style={{ width: 220 }}>
-                                <SongCard song={song} />
+                                <SongCard song={song} from={`?album=${props.match.params.id}`} />
                             </div>
                         );
                     })}

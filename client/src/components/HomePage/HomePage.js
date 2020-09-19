@@ -69,7 +69,6 @@ export default function HomePage() {
 
     function _onReady(event) {
         setPlayer(event.target);
-        console.log(event.target);
     }
 
     const opts = {
@@ -100,8 +99,6 @@ export default function HomePage() {
         variableWidth: true,
         arrows: true,
     };
-
-    console.log({ ...settings });
 
     return (
         <>
@@ -139,10 +136,10 @@ export default function HomePage() {
                 </Slider>
                 <h1 className='top_title'>Top Playlists</h1>
                 <Slider {...settings}>
-                    {topArtists.map((playlist, i) => {
+                    {topPlaylists.map((playlist, i) => {
                         return (
                             <div key={i} style={{ width: 220 }}>
-                                <PlaylistCard src='https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTsn322z_Dw58yJfDO_1OpN5Uf32nBpy-lKrg&usqp=CAU' playlist={playlist} />
+                                <PlaylistCard playlist={playlist} />
                             </div>
                         );
                     })}

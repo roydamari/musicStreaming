@@ -9,30 +9,34 @@ import NavBar from '../NavBar/NavBar';
 
 export default function SongPage(props) {
 
-    const [AlbumSongs, setSongs] = useState([]);
+    const [suggestedSongs, setSongs] = useState([]);
     const [currentSong, setCurrent] = useState()
     const [player, setPlayer] = useState();
     const [nextSong, setNext] = useState();
     const [prevSong, setPrev] = useState();
 
+    const query = props.location.search;
+    const from = query.slice(1, query.length - 2);
+    const id = props.location.search.slice(query.length - 1);
+
     useEffect(() => {
         (async function fetchData() {
-            let current = await axios.get(`/song/${props.match.params.id}`)
-            current = current.data[0];
+            let songs = await axios.get(`/${from}/${id}/songs`);
+            songs = songs.data;
+            setSongs(songs);
+            const current = songs.find(song => props.match.params.id === song.youtube_link);
             setCurrent(current);
-            let songs = await axios.get(`/album/${current.album_id}/songs`);
-            setSongs(songs.data);
-            const next = songs.data.find(song => current.id + 1 === song.id)
+            const next = songs.find((song, i) => i === songs.indexOf(current) + 1);
             if (next) {
                 setNext(next.youtube_link);
             } else {
-                setNext(songs.data[0].youtube_link);
+                setNext(songs[0].youtube_link);
             }
-            const prev = songs.data.find(song => current.id - 1 === song.id)
+            const prev = songs.find((song, i) => i === songs.indexOf(current) - 1)
             if (prev) {
                 setPrev(prev.youtube_link);
             } else {
-                setPrev(songs.data[0].youtube_link);
+                setPrev(songs[songs.length - 1].youtube_link);
             }
         })();
     }, [props.match.params.id])
@@ -50,7 +54,6 @@ export default function SongPage(props) {
 
     function _onReady(event) {
         setPlayer(event.target);
-        console.log(event.target);
     }
 
     function PlayPause(playing) {
@@ -72,12 +75,13 @@ export default function SongPage(props) {
         },
     };
 
+
     function skipSong() {
-        window.location.href = `/song/${nextSong}`;
+        window.location.href = `/song/${nextSong}?${from}=${id}`;
     }
 
     function playPrev() {
-        window.location.href = `/song/${prevSong}`;
+        window.location.href = `/song/${prevSong}?${from}=${id}`;
     }
 
 
@@ -86,6 +90,7 @@ export default function SongPage(props) {
             <NavBar />
             <div>
                 <h1>{currentSong && currentSong.title}</h1>
+                <h3>{currentSong && currentSong.album_name}</h3>
                 <h3>{currentSong && currentSong.artist_name}</h3>
                 <img className='song_cover'
                     src={`https://img.youtube.com/vi/${currentSong && currentSong.youtube_link}/hqdefault.jpg`}
@@ -95,10 +100,10 @@ export default function SongPage(props) {
             </div>
             <div style={{ margin: 'auto', width: '1760px' }}>
                 <Slider {...settings}>
-                    {AlbumSongs.map(song => {
+                    {suggestedSongs.map(song => {
                         return (
                             <div key={song.id} style={{ width: 220 }}>
-                                <SongCard song={song} />
+                                <SongCard song={song} from={`?${from}=${id}`} />
                             </div>
                         );
                     })}

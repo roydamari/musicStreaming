@@ -62,8 +62,10 @@ app.get('/artist/:id/albums', (req, res) => {
 });
 
 app.get('/artist/:id/songs', (req, res) => {
-    let sql = `SELECT song.id, youtube_link, album_id, artist_id, title, length, track_number, lyrics, song.created_at, upload_at, likes, play_count, artist.name AS artist_name FROM artist
-    JOIN song ON song.artist_id = ${req.params.id};`;
+    let sql = `SELECT song.id, youtube_link, album_id, song.artist_id, title, length, track_number, lyrics, song.created_at, song.upload_at, likes, play_count, artist.name AS artist_name, album.name AS album_name FROM artist
+    JOIN song ON song.artist_id = artist.id
+    JOIN album ON album.artist_id = artist.id
+    WHERE artist.id = ${req.params.id};`;
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         res.send(results);
@@ -82,7 +84,7 @@ WHERE album_id = ${req.params.id};`
 });
 
 app.get('/album/:id/songs', (req, res) => {
-    let sql = `SELECT song.id, youtube_link, album_id, song.artist_id, title, length, track_number, lyrics, song.created_at, song.upload_at, likes, play_count, artist.name AS artist_name FROM album
+    let sql = `SELECT song.id, youtube_link, album_id, song.artist_id, title, length, track_number, lyrics, song.created_at, song.upload_at, likes, play_count, artist.name AS artist_name, album.name AS album_name FROM album
     JOIN song ON album.id= song.album_id
     JOIN artist ON artist.id = song.artist_id
     WHERE album_id = ${req.params.id};`;
@@ -94,6 +96,20 @@ app.get('/album/:id/songs', (req, res) => {
 
 app.get('/playlist/:id', (req, res) => {
     let sql = `SELECT * FROM playlist WHERE id = ${req.params.id};`;
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results);
+    })
+});
+
+app.get('/playlist/:id/songs', (req, res) => {
+    let sql = `SELECT song.id, youtube_link, album_id, song.artist_id, title, length, track_number, lyrics, song.created_at, song.upload_at, likes, play_count, album.name AS album_name, artist.name AS artist_name 
+    FROM playlist
+    JOIN playlist_songs ON playlist_songs.playlist_id = playlist.id
+    JOIN song ON song.id = playlist_songs.song_id
+    JOIN album ON album.id = song.album_id
+    JOIN artist ON artist.id = song.artist_id
+    WHERE playlist.id = ${req.params.id};`;
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         res.send(results);
@@ -134,7 +150,13 @@ app.get('/topAlbums', (req, res) => {
 });
 
 app.get('/topPlaylists', (req, res) => {
-    let sql = 'SELECT playlist.name, ROUND(SUM(song.likes)/COUNT(song.id)) AS likes FROM playlist JOIN playlist_songs ON playlist.id = playlist_songs.playlist_id JOIN song ON playlist_songs.song_id = song.id GROUP BY playlist_id ORDER BY SUM(song.likes) DESC LIMIT 20;';
+    let sql = `SELECT playlist.id, playlist.name, playlist.cover_img, playlist.created_at, playlist.upload_at, ROUND(SUM(song.likes)/COUNT(song.id)) AS likes 
+    FROM playlist 
+    JOIN playlist_songs ON playlist.id = playlist_songs.playlist_id 
+    JOIN song ON playlist_songs.song_id = song.id 
+    GROUP BY playlist_id 
+    ORDER BY ROUND(SUM(song.likes)/COUNT(song.id))
+    DESC LIMIT 20;`;
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         res.send(results);

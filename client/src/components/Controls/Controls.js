@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { BiSkipPrevious, BiPlayCircle, BiSkipNext, BiPauseCircle, BiVolumeFull } from 'react-icons/bi';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import './Controls.css'
-import { Link } from 'react-router-dom';
 
 export default function Controls(props) {
 

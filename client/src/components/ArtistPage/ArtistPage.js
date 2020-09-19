@@ -35,7 +35,7 @@ export default function ArtistPage(props) {
     function playNext() {
         player.cueVideoById(nextSong.youtube_link);
         player.playVideo()
-        const next = artistSongs.find(song => song.id === nextSong.id + 1)
+        const next = artistSongs.find(song => song.track_number === nextSong.track_number + 1)
         setPrev(currentSong);
         if (next) {
             setCurrent(nextSong);
@@ -49,7 +49,7 @@ export default function ArtistPage(props) {
     function playPrev() {
         player.cueVideoById(prevSong.youtube_link);
         player.playVideo()
-        const prev = artistSongs.find(song => song.id === prevSong.id - 1);
+        const prev = artistSongs.find(song => song.track_number === prevSong.track_number - 1);
         setNext(currentSong);
         if (prev) {
             setCurrent(prevSong);
@@ -122,8 +122,7 @@ export default function ArtistPage(props) {
                             {artistAlbums.map(album => {
                                 return (
                                     <div key={album.id} style={{ width: 220 }}>
-                                        <AlbumCard src='https://i.pinimg.com/originals/3a/f0/e5/3af0e55ea66ea69e35145fb108b4a636.jpg'
-                                            album={album} />
+                                        <AlbumCard album={album} />
                                     </div>
                                 );
                             })}
@@ -134,8 +133,7 @@ export default function ArtistPage(props) {
                             {artistSongs.map(song => {
                                 return (
                                     <div key={song.id} style={{ width: 220 }}>
-                                        <SongCard src='https://images.squarespace-cdn.com/content/56454c01e4b0177ad4141742/1458827329966-I6OAVNU68IOF0A4IHQVY/Im-Gonna-Be-500-Miles-Cover.jpg?content-type=image%2Fjpeg'
-                                            song={song} />
+                                        <SongCard song={song} from={`?artist=${props.match.params.id}`} />
                                     </div>
                                 );
                             })}

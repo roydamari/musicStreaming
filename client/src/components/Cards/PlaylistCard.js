@@ -3,11 +3,12 @@ import './Cards.css';
 import { Link } from 'react-router-dom';
 
 export default function PlaylistCard(props) {
+
     return (
-        <Link to='/playlist' style={{ textDecoration: 'none' }}>
+        <Link to={`/playlist/${props.playlist.id}`} style={{ textDecoration: 'none' }}>
             <div className="card">
-                <img className='image' src={props.src} alt='' />
-                <div className='title'>Playlist's Title</div>
+                <img className='image' src={props.playlist.cover_img} alt='' />
+                <div className='title'>{props.playlist.name}</div>
             </div>
         </Link >
     );

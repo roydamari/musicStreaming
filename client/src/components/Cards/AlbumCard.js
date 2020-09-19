@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Cards.css';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 
 export default function AlbumCard(props) {

@@ -27,7 +27,7 @@ function App() {
           <Route path="/artist/:id" exact render={(props) => (
             <ArtistPage {...props} />
           )} />
-          <Route path="/playlist" exact render={(props) => (
+          <Route path="/playlist/:id" exact render={(props) => (
             <PlaylistPage {...props} />
           )} />
           <Route path='/404' component={Page404} />
