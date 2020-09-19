@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BiSkipPrevious, BiPlayCircle, BiSkipNext, BiPauseCircle, BiVolumeFull } from 'react-icons/bi';
+import { BiSkipPrevious, BiPlayCircle, BiSkipNext, BiPauseCircle, BiVolumeFull, BiVolumeMute } from 'react-icons/bi';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import './Controls.css'
 
@@ -84,7 +84,16 @@ export default function Controls(props) {
             </div>
             <div className='volume_div'>
                 <div className='volume_wrap'>
-                    <BiVolumeFull size='24px' />
+                    {props.player ? props.player.getVolume() ?
+                        <BiVolumeFull size='24px' cursor='pointer' onClick={() => {
+                            props.player.setVolume(0)
+                            volumeRef.current.value = 0;
+                        }} /> :
+                        <BiVolumeMute size='24px' cursor='pointer' onClick={() => {
+                            props.player.setVolume(100)
+                            volumeRef.current.value = 100;
+                        }} /> :
+                        <BiVolumeFull size='24px' />}
                     <input ref={volumeRef} type="range" min="0" max='100' defaultValue='100' className="volume_level" onChange={changeVolume} />
                 </div>
             </div>

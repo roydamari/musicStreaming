@@ -65,6 +65,7 @@
   transition: opacity 0.2s;
   margin-left: 8px;
   margin-right: 8px;
+  cursor: pointer;
 }
 
 .song_track::-webkit-slider-thumb {
@@ -107,6 +108,7 @@
   transition: opacity 0.2s;
   position: relative;
   bottom: 8px;
+  cursor: pointer;
 }
 
 .volume_level::-webkit-slider-thumb {
@@ -117,4 +119,8 @@
   border-radius: 50%;
   background: white;
   cursor: pointer;
+}
+
+span {
+  user-select: none;
 }

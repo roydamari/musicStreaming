@@ -3,11 +3,12 @@ import './NavBar.css'
 import { AiFillHome, AiOutlineSearch } from 'react-icons/ai';
 import { FaUser } from 'react-icons/fa';
 import { BiArrowBack } from 'react-icons/bi'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
-export default function NavBar() {
+export default function NavBar(props) {
 
     const searchRef = useRef();
+    let history = useHistory();
 
     function toggleSearch() {
         searchRef.current.value = '';
@@ -17,9 +18,7 @@ export default function NavBar() {
 
     return (
         <div className='nav_bar'>
-            <Link to='/'>
-                <BiArrowBack size='28px' className='nav_icon' />
-            </Link>
+            <BiArrowBack size='28px' className='nav_icon' onClick={history.goBack} />
             <Link to='/'>
                 <AiFillHome size='28px' className='nav_icon' />
             </Link>
