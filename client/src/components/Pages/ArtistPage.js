@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import './ArtistPage.css';
+import './Pages.css';
 import SongCard from '../Cards/SongCard';
 import AlbumCard from '../Cards/AlbumCard';
 import Slider from "react-slick";
 import axios from 'axios'
 import Controls from '../Controls/Controls';
 import NavBar from '../NavBar/NavBar';
-import YouTube from 'react-youtube';
 
 export default function ArtistPage(props) {
 
     const [artistSongs, setSongs] = useState([]);
     const [artistAlbums, setAlbums] = useState([]);
     const [artist, setArtist] = useState()
-    const [currentSong, setCurrent] = useState()
-    const [player, setPlayer] = useState();
-    const [nextSong, setNext] = useState();
-    const [prevSong, setPrev] = useState();
 
     useEffect(() => {
         (async function fetchData() {
@@ -26,63 +21,8 @@ export default function ArtistPage(props) {
             setSongs(songs.data);
             let albums = await axios.get(`/artist/${props.match.params.id}/albums`);
             setAlbums(albums.data);
-            setCurrent(songs.data[0]);
-            setNext(songs.data[1]);
-            setPrev(songs.data[songs.data.length - 1]);
         })();
     }, []);
-
-    function playNext() {
-        player.cueVideoById(nextSong.youtube_link);
-        player.playVideo()
-        const next = artistSongs.find(song => song.track_number === nextSong.track_number + 1)
-        setPrev(currentSong);
-        if (next) {
-            setCurrent(nextSong);
-            setNext(next)
-        } else {
-            setCurrent(artistSongs[0]);
-            setNext(artistSongs[1])
-        }
-    }
-
-    function playPrev() {
-        player.cueVideoById(prevSong.youtube_link);
-        player.playVideo()
-        const prev = artistSongs.find(song => song.track_number === prevSong.track_number - 1);
-        setNext(currentSong);
-        if (prev) {
-            setCurrent(prevSong);
-            setPrev(prev);
-        } else {
-            setCurrent(artistSongs[artistSongs.length - 1]);
-            setPrev(artistSongs[artistSongs.length - 2])
-        }
-    }
-
-    function _onReady(event) {
-        setPlayer(event.target);
-        console.log(event.target);
-    }
-
-    function PlayPause(playing) {
-        if (playing) {
-            player.pauseVideo();
-            playing = false;
-        } else {
-            player.playVideo();
-            playing = true;
-        }
-    }
-
-
-    const opts = {
-        height: '0',
-        width: '0',
-        playerVars: {
-            autoplay: 1,
-        },
-    };
 
     const settings = {
         className: "slider variable-width",
@@ -140,8 +80,7 @@ export default function ArtistPage(props) {
                         </Slider>
                     </div>
                 </div>
-                <Controls onPlay={PlayPause} player={player} currentSong={currentSong} skipSong={playNext} playPrev={playPrev} playing={true} />
-                <YouTube videoId={currentSong && currentSong.youtube_link} opts={opts} onReady={_onReady} onEnd={playNext} />
+                <Controls songs={artistSongs} />
             </div >
         </>
     );

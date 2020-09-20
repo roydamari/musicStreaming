@@ -2,32 +2,123 @@ import React, { useEffect, useRef, useState } from 'react';
 import { BiSkipPrevious, BiPlayCircle, BiSkipNext, BiPauseCircle, BiVolumeFull, BiVolumeMute } from 'react-icons/bi';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import './Controls.css'
+import YouTube from 'react-youtube';
 
 export default function Controls(props) {
 
-    let duration = props.player ? props.player.getDuration() : '';
+    const [player, setPlayer] = useState();
     const [currentTime, setCurrentTime] = useState();
-    const [playing, setPlaying] = useState(props.playing);
+    const [playing, setPlaying] = useState(true);
     const [liked, setLiked] = useState(false);
     const rangeRef = useRef();
     const volumeRef = useRef();
+    const [currentSong, setCurrent] = useState()
+    const [nextSong, setNext] = useState();
+    const [prevSong, setPrev] = useState();
+    const { songs } = props;
+    const [lastVolume, setLast] = useState(100);
+
 
 
     useEffect(() => {
-        if (props.player) {
+        (async function fetchData() {
+            if (props.page) {
+                const current = songs.find(song => song.youtube_link === props.page.youtube_link);
+                setCurrent(current);
+                let next = songs[songs.indexOf(current) + 1];
+                if (!next) {
+                    next = songs[0]
+                }
+                setNext(next)
+                let prev = songs[songs.indexOf(current) - 1]
+                if (!prev) {
+                    prev = songs[songs.length - 1]
+                }
+                setPrev(prev);
+            } else {
+                const current = songs[0];
+                setCurrent(current);
+                setNext(songs[1])
+                setPrev(songs[songs.length - 1]);
+            }
+        })();
+    }, [songs]);
+
+
+    useEffect(() => {
+        if (player) {
             setInterval(() => {
-                setCurrentTime(props.player.getCurrentTime())
+                setCurrentTime(player.getCurrentTime())
                 if (rangeRef.current) {
-                    rangeRef.current.value = props.player.getCurrentTime();
+                    rangeRef.current.value = player.getCurrentTime();
                 }
             }, 1000);
         }
-    }, [props.player])
+    }, [player])
+
+    useEffect(() => {
+        if (player) {
+            setPlaying(player.getPlayerState() === 1 ? false : true)
+        }
+    }, [currentSong])
+
+    function playNext() {
+        if (props.page) {
+            window.location.href = `/song/${nextSong.youtube_link}?${props.page.from}=${props.page.id}`;
+        }
+        player.cueVideoById(nextSong.youtube_link);
+        player.playVideo();
+        const next = songs.find((song, i) => songs.indexOf(nextSong) + 1 === i)
+        setPrev(currentSong);
+        if (next) {
+            setCurrent(nextSong);
+            setNext(next)
+        } else {
+            setCurrent(songs[0]);
+            setNext(songs[1])
+        }
+    }
+
+    function playPrev() {
+        if (props.page) {
+            window.location.href = `/song/${prevSong.youtube_link}?${props.page.from}=${props.page.id}`;
+        }
+        player.cueVideoById(prevSong.youtube_link);
+        player.playVideo();
+        const prev = songs.find((song, i) => songs.indexOf(prevSong) - 1 === i);
+        setNext(currentSong);
+        if (prev) {
+            setCurrent(prevSong);
+            setPrev(prev);
+        } else {
+            setCurrent(songs[songs.length - 1]);
+            setPrev(songs[songs.length - 2])
+        }
+    }
 
     function PlayPause() {
-        setPlaying(prevState => !prevState);
-        props.onPlay(playing);
+        if (playing) {
+            player.pauseVideo();
+            setPlaying(prevState => !prevState);
+        } else {
+            player.playVideo();
+            setPlaying(prevState => !prevState);
+        }
     }
+
+    function _onReady(event) {
+        setPlayer(event.target);
+        console.log(event.target);
+    }
+
+    let opts = {
+        height: '0',
+        width: '0',
+        playerVars: {
+            autoplay: 1,
+        },
+    };
+
 
     function toMinutes(duration) {
         let minutes = Math.floor(duration / 60);
@@ -37,13 +128,13 @@ export default function Controls(props) {
     }
 
     function moveVideo(e) {
-        props.player.seekTo(e.currentTarget.value);
-        props.player.playVideo();
+        player.seekTo(e.currentTarget.value);
+        player.playVideo();
         setPlaying(true);
     }
 
     function changeVolume(e) {
-        props.player.setVolume(e.currentTarget.value);
+        player.setVolume(e.currentTarget.value);
     }
 
     function toggleLike() {
@@ -51,52 +142,56 @@ export default function Controls(props) {
     }
 
     return (
-        <div className='footer'>
-            <div className='details'>
-                <img className='song_image' src={`https://img.youtube.com/vi/${props.currentSong && props.currentSong.youtube_link}/hqdefault.jpg`}
-                    alt=''
-                />
-                <div>
-                    <div className='song_title'>{props.currentSong && props.currentSong.title}</div>
-                    <div className='name_artist'>{props.currentSong && props.currentSong.artist_name}</div>
-                    <div className='heart' onClick={toggleLike}>
-                        {liked ? <AiOutlineHeart size='24px' /> : <AiFillHeart size='24px' />}
-                    </div>
-                </div>
-            </div>
-            <div className='play_range'>
-                <div className='controls'>
-                    <div className='icon'>
-                        <div className='icon'>
-                            <BiSkipPrevious size='32px' onClick={props.playPrev} />
+        <>
+            <div className='footer'>
+                <div className='details'>
+                    <img className='song_image' src={`https://img.youtube.com/vi/${currentSong && currentSong.youtube_link}/hqdefault.jpg`}
+                        alt=''
+                    />
+                    <div>
+                        <div className='song_title'>{currentSong && currentSong.title}</div>
+                        <div className='name_artist'>{currentSong && currentSong.artist_name}</div>
+                        <div className='heart' onClick={toggleLike}>
+                            {liked ? <AiOutlineHeart size='24px' /> : <AiFillHeart size='24px' />}
                         </div>
                     </div>
-                    <div className='icon'>
-                        {playing ? <BiPauseCircle size='32px' onClick={PlayPause} /> : <BiPlayCircle size='32px' onClick={PlayPause} />}
+                </div>
+                <div className='play_range'>
+                    <div className='controls'>
+                        <div className='icon'>
+                            <div className='icon'>
+                                <BiSkipPrevious size='32px' onClick={playPrev} />
+                            </div>
+                        </div>
+                        <div className='icon'>
+                            {playing ? <BiPauseCircle size='32px' onClick={PlayPause} /> : <BiPlayCircle size='32px' onClick={PlayPause} />}
+                        </div>
+                        <div className='icon'>
+                            <BiSkipNext size='32px' onClick={playNext} />
+                        </div>
                     </div>
-                    <div className='icon'>
-                        <BiSkipNext size='32px' onClick={props.skipSong} />
+                    <span>{toMinutes(Math.round(currentTime))}</span>
+                    <input ref={rangeRef} type="range" min="0" max={currentSong && currentSong.length} defaultValue='0' className="song_track" onMouseUp={moveVideo} />
+                    <span>{toMinutes(Math.round(currentSong && currentSong.length - currentTime))}</span>
+                </div>
+                <div className='volume_div'>
+                    <div className='volume_wrap'>
+                        {player ? !player.isMuted() ?
+                            <BiVolumeFull size='24px' cursor='pointer' onClick={() => {
+                                setLast(player.getVolume());
+                                player.mute();
+                                volumeRef.current.value = 0;
+                            }} /> :
+                            <BiVolumeMute size='24px' cursor='pointer' onClick={() => {
+                                player.unMute();
+                                volumeRef.current.value = lastVolume;
+                            }} /> :
+                            <BiVolumeFull size='24px' />}
+                        <input ref={volumeRef} type="range" min="0" max='100' defaultValue='100' className="volume_level" onChange={changeVolume} />
                     </div>
                 </div>
-                <span>{toMinutes(Math.round(currentTime))}</span>
-                <input ref={rangeRef} type="range" min="0" max={duration} defaultValue='0' className="song_track" onMouseUp={moveVideo} />
-                <span>{toMinutes(Math.round(duration - currentTime))}</span>
             </div>
-            <div className='volume_div'>
-                <div className='volume_wrap'>
-                    {props.player ? props.player.getVolume() ?
-                        <BiVolumeFull size='24px' cursor='pointer' onClick={() => {
-                            props.player.setVolume(0)
-                            volumeRef.current.value = 0;
-                        }} /> :
-                        <BiVolumeMute size='24px' cursor='pointer' onClick={() => {
-                            props.player.setVolume(100)
-                            volumeRef.current.value = 100;
-                        }} /> :
-                        <BiVolumeFull size='24px' />}
-                    <input ref={volumeRef} type="range" min="0" max='100' defaultValue='100' className="volume_level" onChange={changeVolume} />
-                </div>
-            </div>
-        </div>
+            <YouTube videoId={currentSong && currentSong.youtube_link} opts={opts} onReady={_onReady} onEnd={playNext} />
+        </>
     );
 }

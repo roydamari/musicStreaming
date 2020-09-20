@@ -1,5 +1,5 @@
 import React from 'react';
-import './Page404.css'
+import './Pages.css';
 
 export default function Page404() {
     return (

@@ -9,25 +9,21 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import axios from 'axios'
-import './HomePage.css';
-import YouTube from 'react-youtube';
+import './Pages.css';
 
 export default function HomePage() {
     const [topSongs, setSongs] = useState([]);
     const [topAlbums, setAlbums] = useState([]);
     const [topArtists, setArtists] = useState([]);
     const [topPlaylists, setPlaylists] = useState([]);
-    const [currentSong, setCurrent] = useState()
-    const [player, setPlayer] = useState();
-    const [nextSong, setNext] = useState();
-    const [prevSong, setPrev] = useState();
+
 
     useEffect(() => {
         (async function fetchData() {
             let songs = await axios.get('/topSongs');
-            setSongs(songs.data);
+            songs = songs.data;
+            setSongs(songs);
             let albums = await axios.get('/topAlbums');
-            console.log(albums.data);
             setAlbums(albums.data);
             let artists = await axios.get('/topArtists');
             setArtists(artists.data);
@@ -35,49 +31,6 @@ export default function HomePage() {
             setPlaylists(playlists.data);
         })();
     }, []);
-
-    useEffect(() => {
-        (async function fetchData() {
-            if (topSongs.length > 0) {
-                const found = topSongs[0]
-                setCurrent(found);
-                const next = topSongs.find(song => found.id + 1 === song.id)
-                if (next) {
-                    setNext(next.youtube_link);
-                } else {
-                    setNext(topSongs[0].youtube_link);
-                }
-                const prev = topSongs.find(song => found.id - 1 === song.id)
-                if (prev) {
-                    setPrev(prev.youtube_link);
-                } else {
-                    setPrev(topSongs[0].youtube_link);
-                }
-            }
-        })();
-    }, [topSongs])
-
-    function PlayPause(playing) {
-        if (playing) {
-            player.pauseVideo();
-            playing = false;
-        } else {
-            player.playVideo();
-            playing = true;
-        }
-    }
-
-    function _onReady(event) {
-        setPlayer(event.target);
-    }
-
-    const opts = {
-        height: '0',
-        width: '0',
-        playerVars: {
-            autoplay: 0,
-        },
-    };
 
 
     const settings = {
@@ -145,8 +98,7 @@ export default function HomePage() {
                     })}
                 </Slider>
             </div>
-            <YouTube videoId={currentSong && currentSong.youtube_link} opts={opts} onReady={_onReady} onEnd={() => { window.location.href = `/song/${nextSong}`; }} />
-            <Controls onPlay={PlayPause} player={player} currentSong={currentSong} nextSong={nextSong} prevSong={prevSong} playing={false} />
+            <Controls songs={topSongs} />
         </>
     );
 }

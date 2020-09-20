@@ -16,6 +16,10 @@ export default function NavBar(props) {
         searchRef.current.style.width = searchRef.current.style.width === '200px' ? '0px' : '200px';
     }
 
+    function searchSongs(e) {
+
+    }
+
     return (
         <div className='nav_bar'>
             <BiArrowBack size='28px' className='nav_icon' onClick={history.goBack} />
@@ -26,7 +30,7 @@ export default function NavBar(props) {
                 <FaUser size='28px' className='nav_icon' />
             </Link>
             <AiOutlineSearch size='28px' className='nav_icon' onClick={toggleSearch} />
-            <input ref={searchRef} type='text' className='search_box'></input>
+            <input ref={searchRef} type='text' className='search_box' onChange={searchSongs}></input>
         </div>
     );
 }

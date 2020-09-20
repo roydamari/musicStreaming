@@ -1,12 +1,14 @@
 import React from 'react';
 import './App.css';
-import HomePage from './components/HomePage/HomePage';
-import SongPage from './components/SongPage/SongPage';
-import AlbumPage from './components/AlbumPage/AlbumPage';
-import ArtistPage from './components/ArtistPage/ArtistPage';
-import PlaylistPage from './components/PlaylistPage/PlaylistPage';
-import Page404 from './components/Page404/Page404';
+import HomePage from './components/Pages/HomePage';
+import SongPage from './components/Pages/SongPage';
+import AlbumPage from './components/Pages/AlbumPage';
+import ArtistPage from './components/Pages/ArtistPage';
+import PlaylistPage from './components/Pages/PlaylistPage';
+import Page404 from './components/Pages/Page404';
+import SearchPage from './components/Pages/SearchPage';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+
 
 
 function App() {
@@ -29,6 +31,9 @@ function App() {
           )} />
           <Route path="/playlist/:id" exact render={(props) => (
             <PlaylistPage {...props} />
+          )} />
+          <Route path="/search" exact render={(props) => (
+            <SearchPage {...props} />
           )} />
           <Route path='/404' component={Page404} />
           <Redirect from='*' to='/404' />
