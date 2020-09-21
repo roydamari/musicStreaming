@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NavBar from '../NavBar/NavBar';
-import SongCard from '../Cards/SongCard';
-import AlbumCard from '../Cards/AlbumCard';
-import ArtistCard from '../Cards/ArtistCard';
-import PlaylistCard from '../Cards/PlaylistCard';
+import CarouselCard from '../Cards/CarouselCard';
 import Controls from '../Controls/Controls';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -62,7 +59,7 @@ export default function HomePage() {
                     {topSongs.map(song => {
                         return (
                             <div key={song.id} style={{ width: 220 }}>
-                                <SongCard song={song} />
+                                <CarouselCard result={song} />
                             </div>
                         );
                     })}
@@ -72,7 +69,7 @@ export default function HomePage() {
                     {topAlbums.map((album, i) => {
                         return (
                             <div key={i} style={{ width: 220 }}>
-                                <AlbumCard album={album} />
+                                <CarouselCard result={album} />
                             </div>
                         );
                     })}
@@ -82,7 +79,7 @@ export default function HomePage() {
                     {topArtists.map((artist, i) => {
                         return (
                             <div key={i} style={{ width: 220 }}>
-                                <ArtistCard artist={artist} />
+                                <CarouselCard result={artist} />
                             </div>
                         );
                     })}
@@ -92,7 +89,7 @@ export default function HomePage() {
                     {topPlaylists.map((playlist, i) => {
                         return (
                             <div key={i} style={{ width: 220 }}>
-                                <PlaylistCard playlist={playlist} />
+                                <CarouselCard result={playlist} />
                             </div>
                         );
                     })}

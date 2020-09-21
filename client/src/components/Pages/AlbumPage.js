@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Pages.css';
-import SongCard from '../Cards/SongCard';
+import CarouselCard from '../Cards/CarouselCard';
 import Slider from "react-slick";
 import axios from 'axios'
 import Controls from '../Controls/Controls';
@@ -15,7 +15,6 @@ export default function AlbumPage(props) {
         (async function fetchData() {
             let album = await axios.get(`/album/${props.match.params.id}`);
             setAlbum(album.data[0]);
-            console.log(album.data[0]);
             let songs = await axios.get(`/album/${props.match.params.id}/songs`);
             setSongs(songs.data);
         })();
@@ -47,7 +46,7 @@ export default function AlbumPage(props) {
                     {albumSongs.map(song => {
                         return (
                             <div key={song.id} style={{ width: 220 }}>
-                                <SongCard song={song} from={`?album=${props.match.params.id}`} />
+                                <CarouselCard result={song} from={`?album=${props.match.params.id}`} />
                             </div>
                         );
                     })}

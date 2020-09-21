@@ -20,7 +20,34 @@ app.use(express.json());
 
 
 app.get('/songs', (req, res) => {
-    let sql = 'SELECT * FROM song';
+    let sql = `SELECT song.id, youtube_link, album_id, song.artist_id, title, length, track_number, lyrics, song.created_at, song.upload_at, likes, play_count, album.name AS album_name, artist.name AS artist_name FROM song
+    JOIN album ON song.album_id = album.id
+    JOIN artist ON artist.id = song.artist_id;`;
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results);
+    })
+});
+
+app.get('/albums', (req, res) => {
+    let sql = `SELECT album.id, artist_id, album.name, album.cover_img, album.created_at, upload_at, artist.name AS artist_name FROM album
+    JOIN artist ON artist.id = album.artist_id;`;
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results);
+    })
+});
+
+app.get('/artists', (req, res) => {
+    let sql = `SELECT * FROM artist;`;
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results);
+    })
+});
+
+app.get('/playlists', (req, res) => {
+    let sql = `SELECT * FROM playlist;`;
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         res.send(results);

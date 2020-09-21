@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Pages.css';
-import SongCard from '../Cards/SongCard';
-import AlbumCard from '../Cards/AlbumCard';
+import CarouselCard from '../Cards/CarouselCard';
 import Slider from "react-slick";
 import axios from 'axios'
 import Controls from '../Controls/Controls';
@@ -62,7 +61,7 @@ export default function ArtistPage(props) {
                             {artistAlbums.map(album => {
                                 return (
                                     <div key={album.id} style={{ width: 220 }}>
-                                        <AlbumCard album={album} />
+                                        <CarouselCard result={album} />
                                     </div>
                                 );
                             })}
@@ -73,7 +72,7 @@ export default function ArtistPage(props) {
                             {artistSongs.map(song => {
                                 return (
                                     <div key={song.id} style={{ width: 220 }}>
-                                        <SongCard song={song} from={`?artist=${props.match.params.id}`} />
+                                        <CarouselCard result={song} from={`?artist=${props.match.params.id}`} />
                                     </div>
                                 );
                             })}

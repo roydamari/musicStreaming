@@ -31,3 +31,15 @@ h1 {
   margin-left: 25px;
   font-size: 12px;
 }
+
+.search_card {
+  width: 600px;
+  height: 250px;
+  background-color: rgb(40, 40, 40);
+  display: flex;
+}
+
+h4 {
+  color: white;
+  margin: 8px;
+}

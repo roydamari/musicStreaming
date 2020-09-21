@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Pages.css';
-import SongCard from '../Cards/SongCard';
+import CarouselCard from '../Cards/CarouselCard';
 import Slider from "react-slick";
 import axios from 'axios'
 import Controls from '../Controls/Controls';
@@ -54,7 +54,7 @@ export default function SongPage(props) {
                     {suggestedSongs.map(song => {
                         return (
                             <div key={song.id} style={{ width: 220 }}>
-                                <SongCard song={song} from={`?${from}=${id}`} />
+                                <CarouselCard result={song} from={`?${from}=${id}`} />
                             </div>
                         );
                     })}
