@@ -9,7 +9,7 @@ import NavBar from '../NavBar/NavBar';
 export default function SongPage(props) {
 
     const [suggestedSongs, setSongs] = useState([]);
-    const [currentSong, setCurrent] = useState()
+    const [currentSong, setCurrent] = useState();
 
     const query = props.location.search;
     const from = query.slice(1, query.length - 2);
