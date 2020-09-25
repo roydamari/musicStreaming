@@ -20,7 +20,7 @@ export default function SongPage(props) {
             let songs = await axios.get(`/${from}/${id}/songs`);
             songs = songs.data;
             setSongs(songs);
-            const current = songs.find(song => props.match.params.id === song.youtube_link);
+            const current = songs.find(song => props.match.params.id === song.youtubeLink);
             setCurrent(current);
         })();
     }, [props.match.params.id])
@@ -42,10 +42,10 @@ export default function SongPage(props) {
             <NavBar />
             <div>
                 <h1>{currentSong && currentSong.title}</h1>
-                <h3>{currentSong && currentSong.album_name}</h3>
-                <h3>{currentSong && currentSong.artist_name}</h3>
+                <h3>{currentSong && currentSong.album.name}</h3>
+                <h3>{currentSong && currentSong.artist.name}</h3>
                 <img className='song_cover'
-                    src={`https://img.youtube.com/vi/${currentSong && currentSong.youtube_link}/hqdefault.jpg`}
+                    src={`https://img.youtube.com/vi/${currentSong && currentSong.youtubeLink}/hqdefault.jpg`}
                     alt=''
                 />
             </div>
@@ -60,7 +60,7 @@ export default function SongPage(props) {
                     })}
                 </Slider>
             </div>
-            <Controls songs={suggestedSongs} page={{ from: from, id: id, youtube_link: props.match.params.id }} />
+            <Controls songs={suggestedSongs} page={{ from: from, id: id, youtubeLink: props.match.params.id }} />
         </div>
     );
 }

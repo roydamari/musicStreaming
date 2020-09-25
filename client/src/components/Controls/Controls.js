@@ -23,7 +23,7 @@ export default function Controls(props) {
     useEffect(() => {
         (async function fetchData() {
             if (props.page) {
-                const current = songs.find(song => song.youtube_link === props.page.youtube_link);
+                const current = songs.find(song => song.youtubeLink === props.page.youtubeLink);
                 setCurrent(current);
                 let next = songs[songs.indexOf(current) + 1];
                 if (!next) {
@@ -64,9 +64,9 @@ export default function Controls(props) {
 
     function playNext() {
         if (props.page) {
-            window.location.href = `/song/${nextSong.youtube_link}?${props.page.from}=${props.page.id}`;
+            window.location.href = `/song/${nextSong.youtubeLink}?${props.page.from}=${props.page.id}`;
         }
-        player.cueVideoById(nextSong.youtube_link);
+        player.cueVideoById(nextSong.youtubeLink);
         player.playVideo();
         const next = songs.find((song, i) => songs.indexOf(nextSong) + 1 === i)
         setPrev(currentSong);
@@ -81,9 +81,9 @@ export default function Controls(props) {
 
     function playPrev() {
         if (props.page) {
-            window.location.href = `/song/${prevSong.youtube_link}?${props.page.from}=${props.page.id}`;
+            window.location.href = `/song/${prevSong.youtubeLink}?${props.page.from}=${props.page.id}`;
         }
-        player.cueVideoById(prevSong.youtube_link);
+        player.cueVideoById(prevSong.youtubeLink);
         player.playVideo();
         const prev = songs.find((song, i) => songs.indexOf(prevSong) - 1 === i);
         setNext(currentSong);
@@ -108,7 +108,6 @@ export default function Controls(props) {
 
     function _onReady(event) {
         setPlayer(event.target);
-        console.log(event.target);
     }
 
     let opts = {
@@ -145,12 +144,12 @@ export default function Controls(props) {
         <>
             <div className='footer'>
                 <div className='details'>
-                    <img className='song_image' src={`https://img.youtube.com/vi/${currentSong && currentSong.youtube_link}/hqdefault.jpg`}
+                    <img className='song_image' src={`https://img.youtube.com/vi/${currentSong && currentSong.youtubeLink}/hqdefault.jpg`}
                         alt=''
                     />
                     <div>
                         <div className='song_title'>{currentSong && currentSong.title}</div>
-                        <div className='name_artist'>{currentSong && currentSong.artist_name}</div>
+                        <div className='name_artist'>{currentSong && currentSong.artist.name}</div>
                         <div className='heart' onClick={toggleLike}>
                             {liked ? <AiOutlineHeart size='24px' /> : <AiFillHeart size='24px' />}
                         </div>
@@ -191,7 +190,7 @@ export default function Controls(props) {
                     </div>
                 </div>
             </div>
-            <YouTube videoId={currentSong && currentSong.youtube_link} opts={opts} onReady={_onReady} onEnd={playNext} />
+            <YouTube videoId={currentSong && currentSong.youtubeLink} opts={opts} onReady={_onReady} onEnd={playNext} />
         </>
     );
 }

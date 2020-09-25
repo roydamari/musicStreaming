@@ -13,9 +13,9 @@ export default function AlbumPage(props) {
 
     useEffect(() => {
         (async function fetchData() {
-            let album = await axios.get(`/album/${props.match.params.id}`);
-            setAlbum(album.data[0]);
-            let songs = await axios.get(`/album/${props.match.params.id}/songs`);
+            let album = await axios.get(`/albums/${props.match.params.id}`);
+            setAlbum(album.data);
+            let songs = await axios.get(`/albums/${props.match.params.id}/songs`);
             setSongs(songs.data);
         })();
     }, []);
@@ -35,9 +35,9 @@ export default function AlbumPage(props) {
             <NavBar />
             <div>
                 <h1>{currentAlbum && currentAlbum.name}</h1>
-                <h3>{currentAlbum && currentAlbum.artist_name}</h3>
+                <h3>{currentAlbum && currentAlbum.artist.name}</h3>
                 <img className='album_cover'
-                    src={currentAlbum && currentAlbum.cover_img}
+                    src={currentAlbum && currentAlbum.coverImg}
                     alt=''
                 />
             </div>
@@ -46,7 +46,7 @@ export default function AlbumPage(props) {
                     {albumSongs.map(song => {
                         return (
                             <div key={song.id} style={{ width: 220 }}>
-                                <CarouselCard result={song} from={`?album=${props.match.params.id}`} />
+                                <CarouselCard result={song} from={`?albums=${props.match.params.id}`} />
                             </div>
                         );
                     })}

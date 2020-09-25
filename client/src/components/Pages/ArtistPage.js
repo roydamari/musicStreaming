@@ -14,11 +14,11 @@ export default function ArtistPage(props) {
 
     useEffect(() => {
         (async function fetchData() {
-            let currentArtist = await axios.get(`/artist/${props.match.params.id}`);
-            setArtist(currentArtist.data[0]);
-            let songs = await axios.get(`/artist/${props.match.params.id}/songs`);
+            let currentArtist = await axios.get(`/artists/${props.match.params.id}`);
+            setArtist(currentArtist.data);
+            let songs = await axios.get(`/artists/${props.match.params.id}/songs`);
             setSongs(songs.data);
-            let albums = await axios.get(`/artist/${props.match.params.id}/albums`);
+            let albums = await axios.get(`/artists/${props.match.params.id}/albums`);
             setAlbums(albums.data);
         })();
     }, []);
@@ -49,9 +49,9 @@ export default function ArtistPage(props) {
             <div className='flexContainer'>
                 <div>
                     <h1>{artist && artist.name}</h1>
-                    <h3>{artist && ('Since: ' + artist.created_at.slice(0, 10))}</h3>
+                    <h3>{artist && ('Since: ' + artist.createdAt.slice(0, 10))}</h3>
                     <img className='artist_cover'
-                        src={artist && artist.cover_img}
+                        src={artist && artist.coverImg}
                         alt=''
                     />
                 </div>
@@ -72,7 +72,7 @@ export default function ArtistPage(props) {
                             {artistSongs.map(song => {
                                 return (
                                     <div key={song.id} style={{ width: 220 }}>
-                                        <CarouselCard result={song} from={`?artist=${props.match.params.id}`} />
+                                        <CarouselCard result={song} from={`?artists=${props.match.params.id}`} />
                                     </div>
                                 );
                             })}

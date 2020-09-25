@@ -13,9 +13,9 @@ export default function PlaylistPage(props) {
 
     useEffect(() => {
         (async function fetchData() {
-            let play = await axios.get(`/playlist/${props.match.params.id}`);
-            setPlaylist(play.data[0]);
-            let songs = await axios.get(`/playlist/${props.match.params.id}/songs`);
+            let play = await axios.get(`/playlists/${props.match.params.id}`);
+            setPlaylist(play.data);
+            let songs = await axios.get(`/playlists/${props.match.params.id}/songs`);
             songs = songs.data;
             setSongs(songs);
         })();
@@ -37,9 +37,9 @@ export default function PlaylistPage(props) {
             <NavBar />
             <div>
                 <h1 className='playlist_title'>{playlist && playlist.name}</h1>
-                <h3>{playlist && ('Created at: ' + playlist.created_at.slice(0, 10))}</h3>
+                <h3>{playlist && ('Created at: ' + playlist.createdAt.slice(0, 10))}</h3>
                 <img className='playlist_cover'
-                    src={playlist && playlist.cover_img}
+                    src={playlist && playlist.coverImg}
                     alt=''
                 />
             </div>
@@ -48,7 +48,7 @@ export default function PlaylistPage(props) {
                     {playlistSongs.map(song => {
                         return (
                             <div key={song.id} style={{ width: 220 }}>
-                                <CarouselCard result={song} from={`?playlist=${props.match.params.id}`} />
+                                <CarouselCard result={song} from={`?playlists=${props.match.params.id}`} />
                             </div>
                         );
                     })}

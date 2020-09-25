@@ -17,14 +17,14 @@ export default function HomePage() {
 
     useEffect(() => {
         (async function fetchData() {
-            let songs = await axios.get('/topSongs');
+            let songs = await axios.get('songs/topSongs');
             songs = songs.data;
             setSongs(songs);
-            let albums = await axios.get('/topAlbums');
+            let albums = await axios.get('albums/topAlbums');
             setAlbums(albums.data);
-            let artists = await axios.get('/topArtists');
+            let artists = await axios.get('artists/topArtists');
             setArtists(artists.data);
-            let playlists = await axios.get('/topPlaylists');
+            let playlists = await axios.get('playlists/topPlaylists');
             setPlaylists(playlists.data);
         })();
     }, []);
