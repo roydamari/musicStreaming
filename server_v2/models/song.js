@@ -36,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       field: 'artist_id'
     },
     title: DataTypes.STRING,
+    length: DataTypes.INTEGER,
     lyrics: DataTypes.STRING,
     trackNumber: {
       type: DataTypes.INTEGER,
