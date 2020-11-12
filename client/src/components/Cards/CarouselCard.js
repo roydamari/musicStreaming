@@ -10,7 +10,7 @@ export default function CarouselCard(props) {
     function typeOfResult(obj) {
         if (obj.hasOwnProperty('title')) return 'song';
         if (obj.hasOwnProperty('artist')) return 'album';
-        if (obj.hasOwnProperty('playlist')) return 'playlist';
+        if (obj.hasOwnProperty('uploadAt')) return 'playlist';
         return 'artist';
     }
 
@@ -39,10 +39,10 @@ export default function CarouselCard(props) {
             </div>;
             break;
         case 'playlist':
-            link = `/playlist/${props.result.playlistId}`;
+            link = `/playlist/${props.result.id}`;
             display = <div className="card">
-                <img className='image' src={props.result.playlist.coverImg} alt='' />
-                <div className='title'>{props.result.playlist.name}</div>
+                <img className='image' src={props.result.coverImg} alt='' />
+                <div className='title'>{props.result.name}</div>
             </div>;
             break;
         default:

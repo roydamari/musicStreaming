@@ -11,7 +11,10 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/topAlbums', async (req, res) => {
-
+    const { body } = await client.search({
+        index: 'albums',
+    })
+    res.send(body.hits.hits.map(album => album._source));
 })
 
 
@@ -24,7 +27,7 @@ router.get('/:id', async (req, res) => {
             }
         }
     })
-    res.send(body.hits.hits.map(album => album._source));
+    res.send(body.hits.hits[0]._source);
 })
 
 router.get('/:id/songs', async (req, res) => {

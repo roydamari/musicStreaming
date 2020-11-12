@@ -11,7 +11,10 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/topPlaylists', async (req, res) => {
-
+    const { body } = await client.search({
+        index: 'playlists',
+    })
+    res.send(body.hits.hits.map(playlist => playlist._source));
 })
 
 
@@ -24,7 +27,7 @@ router.get('/:id', async (req, res) => {
             }
         }
     })
-    res.send(body.hits.hits.map(artist => artist._source));
+    res.send(body.hits.hits[0]._source);
 })
 
 router.get('/:id/songs', async (req, res) => {
@@ -50,7 +53,7 @@ router.get('/:id/songs', async (req, res) => {
             }
         }
     })
-    res.send(songs.hits.hits);
+    res.send(songs.hits.hits.map(playlist => playlist._source));
 })
 
 router.post('/', async (req, res) => {

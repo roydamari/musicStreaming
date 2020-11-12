@@ -24,6 +24,7 @@ export default function Controls(props) {
         (async function fetchData() {
             if (props.page) {
                 const current = songs.find(song => song.youtubeLink === props.page.youtubeLink);
+                console.log(current);
                 setCurrent(current);
                 let next = songs[songs.indexOf(current) + 1];
                 if (!next) {

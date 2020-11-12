@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './NavBar.css'
 import { AiFillHome, AiOutlineSearch } from 'react-icons/ai';
 import { FaUser } from 'react-icons/fa';

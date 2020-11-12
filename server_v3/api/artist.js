@@ -11,6 +11,10 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/topArtists', async (req, res) => {
+    const { body } = await client.search({
+        index: 'artists',
+    })
+    res.send(body.hits.hits.map(artist => artist._source));
     // const { body } = await client.search({
     //     index: 'songs',
     //     size: 10000,
@@ -35,7 +39,7 @@ router.get('/:id', async (req, res) => {
             }
         }
     })
-    res.send(body.hits.hits.map(artist => artist._source));
+    res.send(body.hits.hits[0]._source);
 })
 
 router.get('/:id/albums', async (req, res) => {

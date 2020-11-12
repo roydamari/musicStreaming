@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
             }
         }
     })
-    res.send(body.hits.hits.map(song => song._source));
+    res.send(body.hits.hits[0]._source);
 })
 
 router.post('/', async (req, res) => {
