@@ -11,23 +11,47 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/topArtists', async (req, res) => {
-    const { body } = await client.search({
-        index: 'artists',
-    })
-    res.send(body.hits.hits.map(artist => artist._source));
-    // const { body } = await client.search({
-    //     index: 'songs',
-    //     size: 10000,
-    //     body: {
-    //         query: {
-    //             match: { artistId: 2 }
-    //         },
-    //         aggs: {
-    //             likes: { sum: { field: 'likes' } },
-    //         }
-    //     }
-    // })
-    // res.send(body.aggregations);
+    try {
+        const { body } = await client.search({
+            index: 'songs',
+            size: 0,
+            body: {
+                aggs: {
+                    group_by_album: {
+                        terms: {
+                            field: 'artistId',
+                        },
+                        aggs: {
+                            sum_likes: {
+                                sum: {
+                                    field: 'likes'
+                                }
+                            }
+                        }
+                    },
+                }
+            },
+        })
+        const bestArtists = body.aggregations.group_by_album.buckets;
+        let { body: topArtists } = await client.search({
+            index: 'artists',
+            body: {
+                query: {
+                    terms: {
+                        id: bestArtists.map(result => result.key)
+                    }
+                }
+            }
+        })
+        topArtists = topArtists.hits.hits.map(album => {
+            album._source.likes = bestArtists.find(bAlbum => bAlbum.key === album._source.id).sum_likes.value;
+            return album._source;
+        })
+        topArtists.sort((a, b) => b.likes - a.likes);
+        res.send(topArtists);
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 router.get('/:id', async (req, res) => {

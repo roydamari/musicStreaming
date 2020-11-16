@@ -12,9 +12,35 @@ router.get('/', async (req, res) => {
 
 router.get('/topPlaylists', async (req, res) => {
     const { body } = await client.search({
-        index: 'playlists',
+        index: 'playlist_songs',
+        size: 10000,
+        body: {
+            aggs: {
+                group_by_playlist: {
+                    terms: {
+                        field: 'playlistId',
+                    },
+                },
+            }
+        },
     })
-    res.send(body.hits.hits.map(playlist => playlist._source));
+    const playlistIds = body.aggregations.group_by_playlist.buckets.map(result => { return { id: result.key } })
+    const playlistSongs = body.hits.hits.map(song => song._source);
+    const { body: songs } = await client.search({
+        index: 'songs',
+        size: playlistSongs.length,
+        body: {
+            query: {
+                terms: {
+                    id: playlistSongs.map(song => song.songId)
+                }
+            }
+        }
+    })
+    playlistIds.forEach(id => {
+
+    });
+    res.send(playlistIds)
 })
 
 

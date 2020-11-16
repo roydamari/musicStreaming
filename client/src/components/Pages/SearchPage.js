@@ -4,6 +4,13 @@ import axios from 'axios'
 import SearchCard from '../Cards/SearchCard';
 import './Pages.css';
 
+function isEmpty(obj) {
+    if (obj.hasOwnProperty('songs')) {
+        let empty = obj.songs.length + obj.albums.length + obj.artists.length + obj.playlists.length;
+        return empty
+    }
+}
+
 
 export default function SearchPage(props) {
 
@@ -13,31 +20,20 @@ export default function SearchPage(props) {
     const [playlists, setPlaylists] = useState([]);
     const [filteredSongs, setFiltered] = useState([]);
 
-    useEffect(() => {
-        (async function fetchData() {
-            let songs = await axios.get('/songs');
-            setSongs(songs.data);
-            let albums = await axios.get('/albums');
-            setAlbums(albums.data);
-            let artists = await axios.get('/artists');
-            setArtists(artists.data);
-            let playlists = await axios.get('/playlists');
-            setPlaylists(playlists.data);
-        })();
-    }, []);
+    const [results, setResults] = useState([]);
+
 
     useEffect(() => {
-        const params = props.location.search.slice(8);
-        let filtered;
-        if (params) {
-            filtered = songs.filter(song => song.title.toLowerCase().includes(params.toLowerCase()));
-            filtered = filtered.concat(albums.filter(album => album.name.toLowerCase().includes(params.toLowerCase())))
-            filtered = filtered.concat(artists.filter(artist => artist.name.toLowerCase().includes(params.toLowerCase())))
-            filtered = filtered.concat(playlists.filter(playlist => playlist.name.toLowerCase().includes(params.toLowerCase())))
-        } else {
-            filtered = [];
-        }
-        setFiltered(filtered.slice(0, 20));
+        (async function fetchData() {
+            const params = props.location.search.slice(8);
+            if (params) {
+                const { data } = await axios.get(`/search/${params}`)
+                setResults(data);
+                isEmpty(data);
+            } else {
+                setResults([])
+            }
+        })();
     }, [props.match])
 
     const settings = {
@@ -53,13 +49,47 @@ export default function SearchPage(props) {
     return (
         <>
             <NavBar />
-            {filteredSongs.map((result, i) => {
+            {/* {results.map((result, i) => {
                 return <div style={{ margin: '25px', width: 'fit-content' }} key={i}>
                     <SearchCard result={result} />
                 </div>
             })}
-            {(filteredSongs.length === 0 && !props.location.search.slice(8)) && <h4>type to search for a song...</h4>}
-            {(filteredSongs.length === 0 && props.location.search.slice(8)) && <h4>no matching results</h4>}
+            {(results.length === 0 && !props.location.search.slice(8)) && <h4>type to search for a song...</h4>}
+            {(results.length === 0 && props.location.search.slice(8)) && <h4>no matching results</h4>} */}
+            {results.songs && results.songs.length > 0 && <h2 className='search_title'>Songs</h2>}
+            {
+                results.songs && results.songs.map(song => {
+                    return <div style={{ margin: '25px', width: 'fit-content' }} key={song.id}>
+                        <SearchCard result={song} />
+                    </div>
+                })
+            }
+            {results.albums && results.albums.length > 0 && <h2 className='search_title'>Albums</h2>}
+            {
+                results.albums && results.albums.map(album => {
+                    return <div style={{ margin: '25px', width: 'fit-content' }} key={album.id}>
+                        <SearchCard result={album} />
+                    </div>
+                })
+            }
+            {results.artists && results.artists.length > 0 && <h2 className='search_title'>Artists</h2>}
+            {
+                results.artists && results.artists.map(artist => {
+                    return <div style={{ margin: '25px', width: 'fit-content' }} key={artist.id}>
+                        <SearchCard result={artist} />
+                    </div>
+                })
+            }
+            {results.playlists && results.playlists.length > 0 && <h2 className='search_title'>Playlists</h2>}
+            {
+                results.playlists && results.playlists.map(playlist => {
+                    return <div style={{ margin: '25px', width: 'fit-content' }} key={playlist.id}>
+                        <SearchCard result={playlist} />
+                    </div>
+                })
+            }
+            {!props.location.search.slice(8) && <h4>type to search for a song...</h4>}
+            {(isEmpty(results) === 0 && props.location.search.slice(8)) && <h4>no matching results</h4>}
         </>
     );
 }

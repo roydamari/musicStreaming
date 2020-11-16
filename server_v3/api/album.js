@@ -11,10 +11,47 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/topAlbums', async (req, res) => {
-    const { body } = await client.search({
-        index: 'albums',
-    })
-    res.send(body.hits.hits.map(album => album._source));
+    try {
+        const { body } = await client.search({
+            index: 'songs',
+            size: 0,
+            body: {
+                aggs: {
+                    group_by_album: {
+                        terms: {
+                            field: 'albumId',
+                        },
+                        aggs: {
+                            sum_likes: {
+                                sum: {
+                                    field: 'likes'
+                                }
+                            }
+                        }
+                    },
+                }
+            },
+        })
+        const bestAlbums = body.aggregations.group_by_album.buckets;
+        let { body: topAlbums } = await client.search({
+            index: 'albums',
+            body: {
+                query: {
+                    terms: {
+                        id: bestAlbums.map(result => result.key)
+                    }
+                }
+            }
+        })
+        topAlbums = topAlbums.hits.hits.map(album => {
+            album._source.likes = bestAlbums.find(bAlbum => bAlbum.key === album._source.id).sum_likes.value;
+            return album._source;
+        })
+        topAlbums.sort((a, b) => b.likes - a.likes);
+        res.send(topAlbums);
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 
