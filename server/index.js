@@ -20,7 +20,31 @@ app.use(express.json());
 
 
 app.get('/songs', (req, res) => {
-    let sql = 'SELECT * FROM song';
+    let sql = `CALL get_all_songs`;
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results[0]);
+    })
+});
+
+app.get('/albums', (req, res) => {
+    let sql = `CALL get_all_albums;`;
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results[0]);
+    })
+});
+
+app.get('/artists', (req, res) => {
+    let sql = `SELECT * FROM artist;`;
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results);
+    })
+});
+
+app.get('/playlists', (req, res) => {
+    let sql = `SELECT * FROM playlist;`;
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
         res.send(results);
@@ -28,10 +52,10 @@ app.get('/songs', (req, res) => {
 });
 
 app.get('/song/:id', (req, res) => {
-    let sql = `SELECT * FROM song WHERE id = ${req.params.id};`;
+    let sql = `CALL find_song('${req.params.id}');`
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
-        res.send(results);
+        res.send(results[0]);
     })
 });
 
@@ -43,11 +67,35 @@ app.get('/artist/:id', (req, res) => {
     })
 });
 
-app.get('/album/:id', (req, res) => {
-    let sql = `SELECT * FROM album WHERE id = ${req.params.id};`;
+app.get('/artist/:id/albums', (req, res) => {
+    let sql = `CALL find_artist_albums(${req.params.id});`;
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
-        res.send(results);
+        res.send(results[0]);
+    })
+});
+
+app.get('/artist/:id/songs', (req, res) => {
+    let sql = `CALL find_artist_songs(${req.params.id});`;
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results[0]);
+    })
+});
+
+app.get('/album/:id', (req, res) => {
+    let sql = `CALL find_album(${req.params.id});`
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results[0]);
+    })
+});
+
+app.get('/album/:id/songs', (req, res) => {
+    let sql = `CALL find_album_songs(${req.params.id});`;
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results[0]);
     })
 });
 
@@ -59,35 +107,43 @@ app.get('/playlist/:id', (req, res) => {
     })
 });
 
-app.get('/topSongs', (req, res) => {
-    let sql = 'SELECT * FROM song ORDER BY likes DESC LIMIT 20';
+app.get('/playlist/:id/songs', (req, res) => {
+    let sql = `CALL get_playlist_songs(${req.params.id});`;
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
-        res.send(results);
+        res.send(results[0]);
+    })
+});
+
+app.get('/topSongs', (req, res) => {
+    let sql = `CALL get_top_songs;`;
+    let query = db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.send(results[0]);
     })
 });
 
 app.get('/topArtists', (req, res) => {
-    let sql = 'SELECT artist.name, SUM(song.likes) AS likes FROM artist JOIN song ON song.artist_id = artist.id GROUP BY artist_id ORDER BY likes DESC;';
+    let sql = 'CALL get_top_artists;';
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
-        res.send(results);
+        res.send(results[0]);
     })
 });
 
 app.get('/topAlbums', (req, res) => {
-    let sql = 'SELECT album.name, SUM(song.likes) AS likes FROM album JOIN song ON song.album_id = album.id GROUP BY album_id ORDER BY likes DESC;';
+    let sql = `CALL get_top_albums;`;
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
-        res.send(results);
+        res.send(results[0]);
     })
 });
 
 app.get('/topPlaylists', (req, res) => {
-    let sql = 'SELECT playlist.name, SUM(song.likes) AS likes FROM playlist JOIN playlist_songs ON playlist.id = playlist_songs.playlist_id JOIN song ON playlist_songs.song_id = song.id GROUP BY playlist_id ORDER BY SUM(song.likes) DESC LIMIT 20;';
+    let sql = `CALL get_top_playlists;`;
     let query = db.query(sql, (err, results) => {
         if (err) throw err;
-        res.send(results);
+        res.send(results[0]);
     })
 });
 
